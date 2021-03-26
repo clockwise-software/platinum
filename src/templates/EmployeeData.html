@@ -1,0 +1,41 @@
+{%extends 'generalPageStyled.html'%}
+
+
+{%block mainBlock%}
+<h2>Add Employee Data</h2> Currently Disabled On Backend
+
+<form id='myForm' onsubmit="return loadName()">
+  <label>First name:<input type = "text" name = "firstName"><br></label>
+  <label>Last Name:<input type = "text" name = "lastName"><br></label>
+  <label>Business Unit:<input type = "text" name = "bu"><br></label>
+  <label>State:<input type = "text" name = "state"><br></label>
+
+  <button type = "submit"> submit </button>
+</form>
+<span id='txt'></span>
+
+<script>
+  function loadName() {
+    var firstName = document.forms["myForm"]["firstName"].value;
+    var lastName = document.forms["myForm"]["lastName"].value;
+    var businessunit = document.forms["myForm"]["bu"].value;
+    var state = document.forms["myForm"]["state"].value;
+    params = 'firstName='+firstName+'&lastName='+lastName+'&bu='+businessunit+'&state='+state;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", '/Employee/AddEmployee', true); // true is asynchronous
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.onload = function() {
+      if (xhttp.readyState === 4 && xhttp.status === 200) {
+        console.log(xhttp.responseText);
+        document.getElementById("txt").innerHTML = xhttp.responseText;
+      } else {
+        console.error(xhttp.statusText);
+      }
+    };
+    xhttp.send(params);
+    return false;
+  }
+
+</script>
+
+{%endblock%}

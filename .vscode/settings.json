@@ -1,0 +1,5 @@
+{
+    "python.diagnostics.sourceMapsEnabled": true,
+    "editor.detectIndentation": true
+
+}

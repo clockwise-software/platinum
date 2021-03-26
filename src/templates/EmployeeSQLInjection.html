@@ -1,0 +1,14 @@
+{%extends 'generalPageStyled.html'%}
+
+
+{%block mainBlock%}
+<!-- Do we need to process  with ajax?-->
+<!-- not really it is a get and redirecting to a table page is not a bad plan -->
+<h2>Vul. Search for Employee</h2>
+<form id='myForm' action='/Employee/VulnerableSearch' method = 'post'>
+  <label>Last Name:<input type = "text" name = "lastName"><br></label>
+  <button type = "submit"> submit </button>
+</form>
+
+
+{%endblock%}

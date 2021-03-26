@@ -1,0 +1,25 @@
+{%extends 'generalPageStyled.html'%}
+
+
+{%block mainBlock%}
+<h2> Employees</h2>
+<table border = 1>
+   <thead>
+      <td>First Name</td>
+      <td>Last Name</td>
+      <td>Business Unit</td>
+      <td>State</td>
+   </thead>
+
+   {% for row in data %}
+   <!-- A List of tuples so row is each item in the list
+        and then the index is the column number.-->
+      <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}}</td>
+        <td>{{row[3]}}</td>
+        <td>{{row[5]}}</td>
+      </tr>
+   {% endfor %}
+</table>
+{%endblock%}
