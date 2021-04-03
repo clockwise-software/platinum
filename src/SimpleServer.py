@@ -3,8 +3,10 @@
 ## Updated by Dr. Mike Borowczak @ UWyo March 2021
 
 import os
-from flask import Flask, redirect, request, render_template
+from flask import Flask, redirect, request, render_template, make_response
 import sqlite3
+import csv # Import CSV library
+from io import StringIO #Improt String Import/Output Library
 
 DATABASE = 'bootcamp.db'
 
@@ -13,6 +15,20 @@ app = Flask(__name__)
 @app.route("/")
 def basic():
     return render_template('Employee.html')
+
+#This block below downloads the data returned by the database into a CSV file. Nothing is saved to the server.
+@app.route('/exportdata')
+def createCSV():
+        listData = [['1','Christian','Bitzas','Laramie'],['2','Chris','Something','Tampa']]
+        stringInput = StringIO()
+        csvWriter = csv.writer(stringInput)
+        csvWriter.writerows(listData)
+        
+        download = make_response(stringInput.getvalue()) #Create response object to download CSV
+        download.headers["Content-Disposition"] = "attachment; filename=ExportedData.csv"
+        download.headers["Content-type"] = "text/csv"
+        return download
+
 
 @app.route("/Employee/AddEmployee", methods = ['POST','GET'])
 def studentAddDetails():
