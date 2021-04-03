@@ -85,10 +85,10 @@ footer.footer-styles{
 }
 .footer-link{
     font-size: 12px;
-    color:cyan;
+    color:#fff;
 }
 .footer-link:hover{
-    color:white;
+    color:#fff;
     text-decoration: none;
     font-size:13px;
 }
