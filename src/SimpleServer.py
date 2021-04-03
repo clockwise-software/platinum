@@ -66,7 +66,7 @@ def root():
     # TODO: Make this dynamically load
     # TODO: Make this prettier
     data = Employee.query.all()
-    return render_template("Employee.html", data=data)
+    return render_template("EmployeeSearch.html", data=data) #Make Employee Search Page the Default Page
 
 
 @app.route("/Employee/AddEmployee", methods=["GET", "POST"])
