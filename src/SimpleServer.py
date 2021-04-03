@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def basic():
-    return render_template('Employee.html')
+    return render_template('EmployeeSearch.html')
 
 #This block below downloads the data returned by the database into a CSV file. Nothing is saved to the server.
 @app.route('/exportdata')
