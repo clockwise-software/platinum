@@ -2,12 +2,14 @@
 # Based on Server from Dr. Ian Cooper @ Cardiff
 # Updated by Dr. Mike Borowczak @ UWyo March 2021
 
+from operator import and_
 import secrets
 import sqlite3
 
 from flask import Flask, render_template, request
 
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import or_, and_
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///bootcamp.db"
@@ -86,22 +88,33 @@ def studentAddDetails():
 def surnameSearch():
     if request.method == "GET":
         return render_template("EmployeeSearch.html")
-    try:
-        lastName = request.form.get(
-            "lastName", default="Error"
-        )  # rem: args for get form for post
-        conn = sqlite3.connect(DATABASE)
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM 'EmployeeList' WHERE LastName=?", [lastName])
-        data = cur.fetchall()
-        print(data)
-    except Exception as e:
-        print("there was an error", e, data)
-        conn.close()
-    finally:
-        conn.close()
-        # return str(data)
-        return render_template("Employee.html", data=data)
+
+    # Select and prepare data for query
+    payload = {
+        "first_name": request.form.get("first_name"),
+        "last_name": request.form.get("last_name"),
+        "career_matrix": request.form.get("job_title"),
+        "licenses": request.form.get("licenses"),
+        "state": request.form.get("state"),
+    }
+    funcs = {
+        "first_name": Employee.first_name.ilike,
+        "last_name": Employee.last_name.ilike,
+        "career_matrix": Employee.career_matrix.ilike,
+        "licenses": Employee.licenses.ilike,
+        "state": Employee.state.ilike,
+    }
+    payload = {k: v for k, v in payload.items() if v != "" and v is not None}
+    payload = {k: f"%{v}%" for k, v in payload.items()}
+    print(payload)
+
+    res = Employee.query
+
+    query = res.filter(and_(*[funcs[k](v) for k, v in payload.items()])).order_by(
+        Employee.last_name
+    )
+
+    return render_template("Employee.html", data=query)
 
 
 if __name__ == "__main__":
