@@ -1,32 +1,25 @@
-{%extends 'generalPageStyled.html'%} {%block mainBlock%}
-<h2>Employees</h2>
-<table border="1">
-  <thead>
-    <td>First Name</td>
-    <td>Last Name</td>
-    <td>FT/PT/.75</td>
-    <td>Business Unit</td>
-    <td>City</td>
-    <td>State/Province</td>
-    <td>Career Matrix Title</td>
-    <td>Total Years</td>
-    <td>Registered Licenses</td>
-    <td>Skill</td>
-  </thead>
+{%extends 'generalPageStyled.html'%}
 
-  {% for row in data %}
-  <tr>
-    <td>{{row.first_name}}</td>
-    <td>{{row.last_name}}</td>
-    <td>{{row.hours}}</td>
-    <td>{{row.business_unit}}</td>
-    <td>{{row.city}}</td>
-    <td>{{row.state}}</td>
-    <td>{{row.career_matrix}}</td>
-    <td>{{row.total_years}}</td>
-    <td>{{row.licenses}}</td>
-    <td>{{row.skill}}</td>
-  </tr>
-  {% endfor %}
+
+{%block mainBlock%}
+<h2> Employees</h2>
+<table border = 1>
+   <thead>
+      <td>First Name</td>
+      <td>Last Name</td>
+      <td>Business Unit</td>
+      <td>State</td>
+   </thead>
+
+   {% for row in data %}
+   <!-- A List of tuples so row is each item in the list
+        and then the index is the column number.-->
+      <tr>
+        <td>{{row[0]}}</td>
+        <td>{{row[1]}}</td>
+        <td>{{row[3]}}</td>
+        <td>{{row[5]}}</td>
+      </tr>
+   {% endfor %}
 </table>
 {%endblock%}
