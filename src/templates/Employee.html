@@ -22,36 +22,42 @@
             <td>Registered Licenses</td>
             <td>Skill</td>
          </thead>
-          <!-- Basic dropdown -->
-  <button class="btn btn-dark me-2 dropdown-toggle mr-4" type="button" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">Licenses</button>
+<!-- Basic dropdown -->
+  <button class="btn btn-dark dropdown-toggle mr-4" type="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">Basic dropdown</button>
 
 
-   <div class="dropdown-menu">
+  <div class="dropdown-menu">
     <a class="dropdown-item">
       <!-- Default unchecked -->
       <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="PE" name="PE_checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox1">
         <label class="custom-control-label" for="checkbox1">PE</label>
       </div>
     </a>
     <a class="dropdown-item" href="#">
       <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="PG" name="PG_checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox2" checked>
         <label class="custom-control-label" for="checkbox2">PG</label>
       </div>
     </a>
     <a class="dropdown-item" href="#">
       <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="EIT" name="EIT_checkbox">
-        <label class="custom-control-label" for="checkbox3">EIT</label>
+        <input type="checkbox" class="custom-control-input" id="checkbox3">
+        <label class="custom-control-label" for="checkbox3">CPP</label>
+
       </div>
     </a>
+        <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="#">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox4" checked>
+        <label class="custom-control-label" for="checkbox4">EIT</label>
+      </div>
     </a>
+
   </div>
-
-
-</div>
+  <!-- Basic dropdown -->
          {% for row in data %}
          <tr class="table table-striped table-dark">
             <td>{{row.first_name}}</td>
