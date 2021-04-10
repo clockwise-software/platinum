@@ -1,78 +1,108 @@
 {%extends 'generalPageStyled.html'%} {%block mainBlock%}
 <div class="container results-page-styles">
-   <h2 class="employee-header-styles">Employees</h2>
-   <a href="/exportdata"><input type="submit" class="btnExport" value="Export Results" /></a>
-   <a href="/"><input type="submit" class="btnBack" value="Back" /></a>
+  <h2 class="employee-header-styles">Employees</h2>
+  <a href="/exportdata"
+    ><input type="submit" class="btnExport" value="Export Results"
+  /></a>
+  <a href="/"><input type="submit" class="btnBack" value="Back" /></a>
 
-    <form action="/Employee/Search" method="post">
-      <button type="submit" class="btn-link">Update</button>
+  <form action="/Employee/Search" method="post">
+    <button type="submit" class="btn-link">Update</button>
+
+
+  <table class="table table-striped table-dark">
+    <thead class="general-table-styles">
+      <td>First Name</td>
+      <td>Last Name</td>
+      <td>FT/PT/.75</td>
+      <td>Business Unit</td>
+      <td>City</td>
+      <td>State/Province</td>
+      <td>Career Matrix Title</td>
+      <td>Total Years</td>
+      <td>Registered Licenses</td>
+      <td>Skill</td>
+    </thead>
+    <!-- Basic dropdown -->
+    <button
+      class="btn btn-dark dropdown-toggle mr-4"
+      type="button"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      Basic dropdown
+    </button>
+
+    <div class="dropdown-menu">
+      <a class="dropdown-item">
+        <!-- Default unchecked -->
+        <div class="custom-control custom-checkbox">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="checkbox1"
+            name="PE_checkbox"
+            {{checkbox_status[0]}}
+          />
+          <label class="custom-control-label" for="checkbox1">PE</label>
+        </div>
+      </a>
+      <a class="dropdown-item" href="#">
+        <div class="custom-control custom-checkbox">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="checkbox2"
+            name="PG_checkbox"
+            {{checkbox_status[1]}}
+          />
+          <label class="custom-control-label" for="checkbox2">PG</label>
+        </div>
+      </a>
+      <a class="dropdown-item" href="#">
+        <div class="custom-control custom-checkbox">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="checkbox3"
+            name="CPP_checkbox"
+            {{checkbox_status[2]}}
+          />
+          <label class="custom-control-label" for="checkbox3">CPP</label>
+        </div>
+      </a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="#">
+        <div class="custom-control custom-checkbox">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="checkbox4"
+            name="EIT_checkbox"
+            {{checkbox_status[3]}}
+          />
+          <label class="custom-control-label" for="checkbox4">EIT</label>
+        </div>
+      </a>
+    </div>
     </form>
-
-   <table class="table table-striped table-dark">
-
-         <thead class="general-table-styles">
-            <td>First Name</td>
-            <td>Last Name</td>
-            <td>FT/PT/.75</td>
-            <td>Business Unit</td>
-            <td>City</td>
-            <td>State/Province</td>
-            <td>Career Matrix Title</td>
-            <td>Total Years</td>
-            <td>Registered Licenses</td>
-            <td>Skill</td>
-         </thead>
-<!-- Basic dropdown -->
-  <button class="btn btn-dark dropdown-toggle mr-4" type="button" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">Basic dropdown</button>
-
-
-  <div class="dropdown-menu">
-    <a class="dropdown-item">
-      <!-- Default unchecked -->
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="checkbox1">
-        <label class="custom-control-label" for="checkbox1">PE</label>
-      </div>
-    </a>
-    <a class="dropdown-item" href="#">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="checkbox2" checked>
-        <label class="custom-control-label" for="checkbox2">PG</label>
-      </div>
-    </a>
-    <a class="dropdown-item" href="#">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="checkbox3">
-        <label class="custom-control-label" for="checkbox3">CPP</label>
-
-      </div>
-    </a>
-        <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="#">
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="checkbox4" checked>
-        <label class="custom-control-label" for="checkbox4">EIT</label>
-      </div>
-    </a>
-
-  </div>
-  <!-- Basic dropdown -->
-         {% for row in data %}
-         <tr class="table table-striped table-dark">
-            <td>{{row.first_name}}</td>
-            <td>{{row.last_name}}</td>
-            <td>{{row.hours}}</td>
-            <td>{{row.business_unit}}</td>
-            <td>{{row.city}}</td>
-            <td>{{row.state}}</td>
-            <td>{{row.career_matrix}}</td>
-            <td>{{row.total_years}}</td>
-            <td>{{row.licenses}}</td>
-            <td>{{row.skill}}</td>
-         </tr>
-         {% endfor %}
-   </table>
+    <!-- Basic dropdown -->
+    {% for row in data %}
+    <tr class="table table-striped table-dark">
+      <td>{{row.first_name}}</td>
+      <td>{{row.last_name}}</td>
+      <td>{{row.hours}}</td>
+      <td>{{row.business_unit}}</td>
+      <td>{{row.city}}</td>
+      <td>{{row.state}}</td>
+      <td>{{row.career_matrix}}</td>
+      <td>{{row.total_years}}</td>
+      <td>{{row.licenses}}</td>
+      <td>{{row.skill}}</td>
+    </tr>
+    {% endfor %}
+  </table>
 </div>
 
 {%endblock%}

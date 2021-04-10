@@ -117,6 +117,8 @@ def searchEmployee():
         session["last_query_params"] = None
         return render_template("EmployeeSearch.html")
 
+    checkbox_status = ["", "", "", ""]
+
     if session.get("last_query_params") is None:
         # Select and prepare data for query
         payload = {
@@ -133,6 +135,12 @@ def searchEmployee():
             and_(*[getattr(Employee, k).ilike(v) for k, v in payload.items()])
         ).order_by(Employee.last_name)
 
+        # Save the last query per session for easy export
+        session["last_query"] = [q.as_dict() for q in search_query]
+        session["last_query_params"] = payload
+
+        print("NOT FOUND", session["last_query"])
+
     else:
         payload = session["last_query_params"]
         payload["licenses"] = {
@@ -141,13 +149,24 @@ def searchEmployee():
             "EI": request.form.get("EI_checkbox"),
         }
 
-        if list(payload["licenses"].values()) == [None, None, None]:
+        if list(payload["licenses"].values()) == [None, None, None, None]:
             payload["licenses"] = None
+            checkbox_status = ["", "", "", ""]
+        else:
+            checkbox_status = [
+                "checked" for c in payload["licenses"].values() if c is not None
+            ]
 
         payload = {k: v for k, v in payload.items() if v != "" and v is not None}
 
         subquery = Employee.query.filter(
-            and_(*[getattr(Employee, k).ilike(v) for k, v in payload.items()])
+            and_(
+                *[
+                    getattr(Employee, k).ilike(v)
+                    for k, v in payload.items()
+                    if k != "licenses"
+                ]
+            )
         ).order_by(Employee.last_name)
 
         if payload.get("licenses") is not None:
@@ -162,12 +181,13 @@ def searchEmployee():
                     search_query.append(q)
         else:
             search_query = subquery
+            print(search_query)
 
-    # Save the last query per session for easy export
-    session["last_query"] = [q.as_dict() for q in search_query]
-    session["last_query_params"] = payload
+        print("FOUND", session["last_query"])
 
-    return render_template("Employee.html", data=search_query)
+    return render_template(
+        "Employee.html", data=search_query, checkbox_status=checkbox_status
+    )
 
 
 # This block below downloads the data returned by the database into a CSV file. Nothing is saved to the server.
