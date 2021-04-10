@@ -1,9 +1,12 @@
 
 {%extends 'generalPageStyled.html'%} {%block mainBlock%}
-<div class="container">
-    <h2>Employees</h2>
+<div class="container results-page-styles">
+
+    <h2 class="employee-header-styles">Employees</h2>
+    <a href="/exportdata"><input type="submit" class="btnExport" value="Export Results" /></a>
+    <a href="/"><input type="submit" class="btnBack" value="Back" /></a>
     <table border="1">
-    <thead>
+    <thead class="general-table-styles">
         <td>First Name</td>
         <td>Last Name</td>
         <td>FT/PT/.75</td>
@@ -17,7 +20,7 @@
     </thead>
 
     {% for row in data %}
-    <tr>
+    <tr class="general-table-styles">
         <td>{{row.first_name}}</td>
         <td>{{row.last_name}}</td>
         <td>{{row.hours}}</td>
