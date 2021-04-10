@@ -12,14 +12,20 @@
     border: none;
     border-radius: 1.5rem;
     padding: 2%;
-    width: 60%;
+    width: 68%;
     background: #f8f9fa;
     font-weight: bold;
     color: #383d41;
     margin-top: 30%;
     margin-bottom: 3%;
     cursor: pointer;
+    transition: 0.3s;
 }
+
+.search-left input:hover{
+    box-shadow: inset 0px 0px 5px 5px rgba(95, 95, 95,.7);
+}
+
 .search-right{
     background: #f8f9fa;
     border-top-left-radius: 10% 50%;
@@ -51,6 +57,11 @@
     font-weight: 600;
     width: 50%;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.btnSearch:hover{
+    box-shadow: inset 0px 0px 10px 10px rgba(95, 95, 95,.7);
 }
 .search-heading{
     text-align: center;

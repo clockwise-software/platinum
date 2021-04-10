@@ -20,7 +20,7 @@
                   <div class="col-md-6">
                      <form action="/Employee/Search" method="POST">
                      <div class="form-group">
-                        <input type="text" class="form-control" name="job_title" placeholder="Job Title *" value="" />
+                        <input type="text"  name ="first_name"minlength="3" maxlength="25" name="txtEmpPhone" class="form-control" placeholder="First Name *" value="" />
                      </div>
                      <div class="form-group">
                         <input type="text" class="form-control" name="licenses" placeholder="Licenses  *" value="" />
@@ -28,11 +28,11 @@
                      <div class="form-group">
                         <div class="form">
                            <label class="form-check-label inline">
-                           <input type="radio" id="boxes" name="eStatus1" value="remote" checked>
+                           <input type="radio" id="eStatus1" name="checkradio" value="remote" checked>
                            <span> Remote</span>
                            </label>
                            <label class="radio inline">
-                           <input type="radio" id="boxes"  name="eStatus2" value="inPerson">
+                           <input type="radio" id="eStatus1"  name="checkradio" value="inPerson">
                            <span>In Person</span>
                            </label>
                         </div>
@@ -43,7 +43,7 @@
                         <input type="text" name="last_name" class="form-control" placeholder="Last Name  *" value="" />
                      </div>
                      <div class="form-group">
-                        <input type="text"  name ="first_name"minlength="3" maxlength="25" name="txtEmpPhone" class="form-control" placeholder="First Name *" value="" />
+                        <input type="text" class="form-control" name="job_title" placeholder="Job Title *" value="" />
 
                      </div>
                      <div class="form-group">
