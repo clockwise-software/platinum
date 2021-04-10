@@ -115,16 +115,13 @@ def surnameSearch():
     query = res.filter(and_(*[funcs[k](v) for k, v in payload.items()])).order_by(
         Employee.last_name
     )
-    #session.query(User).all()
-    #dataList = [r for r, in payload.items()]
-    #dataList = [["FIRSTNAME","LASTNAME","CAREER","LICENSE(S)","STATE"]]
-    #global dataList = []
-    #dataList.append(["FIRSTNAME","LASTNAME","CAREER","LICENSE(S)","STATE"])
+    
+    #Add query to global list for exporting
+    global dataList
+    dataList = [['FIRST NAME', 'LAST NAME', 'CAREER', 'LICENSES', 'STATE']]
     for item in query:
         dataList.append([item.first_name,item.last_name,item.career_matrix, item.licenses, item.state])
 
-        #for a, b, c in listOfTuples
-    #session.query(Queue).all()
     return render_template("Employee.html", data=query)
 
 
@@ -132,15 +129,8 @@ def surnameSearch():
 # This block below downloads the data returned by the database into a CSV file. Nothing is saved to the server.
 @app.route("/exportdata")
 def createCSV():
-
-
-    listData = [
-        ["1", "Christian", "Bitzas", "Laramie"],
-        ["2", "Chris", "Something", "Tampa"],
-    ]
     stringInput = StringIO()
     csvWriter = csv.writer(stringInput)
-    #csvWriter.writerows(listData)
     csvWriter.writerows(dataList)
 
     download = make_response(
