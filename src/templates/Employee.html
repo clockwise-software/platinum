@@ -1,32 +1,37 @@
 {%extends 'generalPageStyled.html'%} {%block mainBlock%}
-<h2>Employees</h2>
-<table border="1">
-  <thead>
-    <td>First Name</td>
-    <td>Last Name</td>
-    <td>FT/PT/.75</td>
-    <td>Business Unit</td>
-    <td>City</td>
-    <td>State/Province</td>
-    <td>Career Matrix Title</td>
-    <td>Total Years</td>
-    <td>Registered Licenses</td>
-    <td>Skill</td>
-  </thead>
+<div class="container results-page-styles">
 
-  {% for row in data %}
-  <tr>
-    <td>{{row.first_name}}</td>
-    <td>{{row.last_name}}</td>
-    <td>{{row.hours}}</td>
-    <td>{{row.business_unit}}</td>
-    <td>{{row.city}}</td>
-    <td>{{row.state}}</td>
-    <td>{{row.career_matrix}}</td>
-    <td>{{row.total_years}}</td>
-    <td>{{row.licenses}}</td>
-    <td>{{row.skill}}</td>
-  </tr>
-  {% endfor %}
-</table>
+    <h2 class="employee-header-styles">Employees</h2>
+    <a href="/exportdata"><input type="submit" class="btnExport" value="Export Results" /></a>
+    <a href="/"><input type="submit" class="btnBack" value="Back" /></a>
+    <table border="1">
+    <thead class="general-table-styles">
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>FT/PT/.75</td>
+        <td>Business Unit</td>
+        <td>City</td>
+        <td>State/Province</td>
+        <td>Career Matrix Title</td>
+        <td>Total Years</td>
+        <td>Registered Licenses</td>
+        <td>Skill</td>
+    </thead>
+
+    {% for row in data %}
+    <tr class="general-table-styles">
+        <td>{{row.first_name}}</td>
+        <td>{{row.last_name}}</td>
+        <td>{{row.hours}}</td>
+        <td>{{row.business_unit}}</td>
+        <td>{{row.city}}</td>
+        <td>{{row.state}}</td>
+        <td>{{row.career_matrix}}</td>
+        <td>{{row.total_years}}</td>
+        <td>{{row.licenses}}</td>
+        <td>{{row.skill}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+</div>
 {%endblock%}

@@ -92,3 +92,12 @@ footer.footer-styles{
     text-decoration: none;
     font-size:13px;
 }
+.employee-header-styles{
+    text-align: center;
+}
+.results-page-styles{
+    background: -webkit-linear-gradient(left, #C82300, #605F5F);
+}
+.general-table-styles{
+    color: #fff;
+}
