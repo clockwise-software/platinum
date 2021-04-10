@@ -8,7 +8,15 @@ import secrets
 from datetime import datetime
 from io import StringIO
 
-from flask import Flask, make_response, render_template, request, session, redirect
+from flask import (
+    Flask,
+    make_response,
+    render_template,
+    request,
+    session,
+    redirect,
+    url_for,
+)
 from sqlalchemy import and_
 
 from flask_sqlalchemy import SQLAlchemy
@@ -65,9 +73,9 @@ class Employee(db.Model):
         return {c: getattr(self, c) for c in self.column_names}
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def basic():
-    return redirect("/Employee/Search")
+    return render_template("EmployeeSearch.html")
 
 
 @app.route("/Employee/AddEmployee", methods=["GET", "POST"])
