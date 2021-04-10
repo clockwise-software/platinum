@@ -1,14 +1,24 @@
-## CLOCKWISE-BOOTCAMP SimpleServer.py 
-## Based on Server from Dr. Ian Cooper @ Cardiff
-## Updated by Dr. Mike Borowczak @ UWyo March 2021
+# CLOCKWISE-BOOTCAMP SimpleServer.py
+# Based on Server from Dr. Ian Cooper @ Cardiff
+# Updated by Dr. Mike Borowczak @ UWyo March 2021
 
-import os
-from flask import Flask, redirect, request, render_template
-import sqlite3
 
-DATABASE = 'bootcamp.db'
+import csv
+import secrets
+from datetime import datetime
+from io import StringIO
+
+from flask import Flask, make_response, render_template, request, session
+from sqlalchemy import and_
+
+from flask_sqlalchemy import SQLAlchemy
+
+DATABASE = "bootcamp.db"
+SESSION_TYPE = "memcached"
 
 app = Flask(__name__)
+
+# DB connector
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///bootcamp.db"
 
 # Generate a safe secret key on the fly
@@ -17,7 +27,7 @@ app.secret_key = secrets.token_urlsafe(32)
 # Load the database
 db = SQLAlchemy(app)
 
-dataList = []
+
 class Employee(db.Model):
     """Database Model"""
 
@@ -37,39 +47,64 @@ class Employee(db.Model):
     skill = db.Column("Skill", db.Text)
     skill_level = db.Column("Skill Level", db.Text)
 
+    column_names = [
+        "first_name",
+        "last_name",
+        "hours",
+        "business_unit",
+        "city",
+        "state",
+        "career_matrix",
+        "total_years",
+        "licenses",
+        "skill",
+        "skill_level",
+    ]
+
+    def as_dict(self):
+        return {c: getattr(self, c) for c in self.column_names}
 
 
 @app.route("/")
 def basic():
-    return render_template('Employee.html')
+    return render_template("Employee.html", data=Employee.query.all())
 
-@app.route("/Employee/AddEmployee", methods = ['POST','GET'])
-def studentAddDetails():
-	if request.method =='GET':
-		return render_template('EmployeeData.html')
-	if request.method =='POST':
-		firstName = request.form.get('firstName', default="Error") 
-		lastName = request.form.get('lastName', default="Error")
-		businessunit = request.form.get('bu', default="Error")
-		state = request.form.get('state', default="Error")
-		print("inserting employee"+firstName)
-		try:
-			conn = sqlite3.connect(DATABASE)
-			cur = conn.cursor()
-			cur.execute("INSERT INTO EmployeeList ('FirstName', 'LastName', 'Business Unit', 'State/Province')\
-						VALUES (?,?,?,?)",(firstName, lastName, businessunit, state ) )
 
-			conn.commit()
-			msg = "Record successfully added"
-		except:
-			conn.rollback()
-			msg = "error in insert operation"
-		finally:
-			conn.close()
-			return msg
+@app.route("/Employee/AddEmployee", methods=["GET", "POST"])
+def addEmployee():
+    if request.method == "GET":
+        return render_template("EmployeeData.html")
 
-@app.route("/Employee/Search", methods = ['GET','POST'])
-def surnameSearch():
+    # If a field is left empty do nothing
+    # TODO: Implement a pretty way of telling the user
+    if "" in request.form.values():
+        return ("", 204)
+
+    first_name = request.form.get("first_name")
+    last_name = request.form.get("last_name")
+
+    # Check if the employee already exists
+    employee = Employee.query.filter_by(
+        first_name=first_name, last_name=last_name
+    ).first()
+
+    # Update if the employee exists
+    # TODO: Show some pretty confirmation
+    if employee is not None:
+        employee.first_name = request.form.get("first_name")
+        employee.last_name = request.form.get("last_name")
+        employee.business_unit = request.form.get("business_unit")
+        employee.state = request.form.get("state")
+    else:
+        employee = Employee(**request.form)
+        db.session.add(employee)
+
+    db.session.commit()
+    return render_template("EmployeeData.html")
+
+
+@app.route("/Employee/Search", methods=["GET", "POST"])
+def searchEmployee():
     if request.method == "GET":
         return render_template("EmployeeSearch.html")
 
@@ -90,39 +125,48 @@ def surnameSearch():
     }
     payload = {k: v for k, v in payload.items() if v != "" and v is not None}
     payload = {k: f"%{v}%" for k, v in payload.items()}
-    print(payload)
 
     res = Employee.query
 
     query = res.filter(and_(*[funcs[k](v) for k, v in payload.items()])).order_by(
         Employee.last_name
     )
-    
-    #Add query to global list for exporting
-    global dataList
-    dataList = [['FIRST NAME', 'LAST NAME', 'CAREER', 'LICENSES', 'STATE']]
-    for item in query:
-        dataList.append([item.first_name,item.last_name,item.career_matrix, item.licenses, item.state])
+
+    # Save the last query per session for easy export
+    session["last_query"] = [q.as_dict() for q in query]
 
     return render_template("Employee.html", data=query)
-
 
 
 # This block below downloads the data returned by the database into a CSV file. Nothing is saved to the server.
 @app.route("/exportdata")
 def createCSV():
-    stringInput = StringIO()
-    csvWriter = csv.writer(stringInput)
-    csvWriter.writerows(dataList)
+    buffer = StringIO()
+    writer = csv.DictWriter(
+        buffer,
+        delimiter=",",
+        quotechar='"',
+        quoting=csv.QUOTE_MINIMAL,
+        fieldnames=Employee.column_names,
+    )
 
-    download = make_response(
-        stringInput.getvalue()
-    )  # Create response object to download CSV
-    download.headers["Content-Disposition"] = "attachment; filename=ExportedData.csv"
+    if session.get("last_query") is None:
+        session["last_query"] = []
+
+    writer.writeheader()
+    writer.writerows(session["last_query"])
+
+    # Create response object to download CSV
+    download = make_response(buffer.getvalue())
+
+    now = datetime.now().strftime("%d-%m-%y_%H-%M-%S")
+
+    download.headers[
+        "Content-Disposition"
+    ] = f"attachment; filename=ExportedData_{now}.csv"
     download.headers["Content-type"] = "text/csv"
+
     return download
-
-
 
 
 if __name__ == "__main__":
