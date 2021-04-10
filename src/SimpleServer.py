@@ -115,12 +115,9 @@ def surnameSearch():
     query = res.filter(and_(*[funcs[k](v) for k, v in payload.items()])).order_by(
         Employee.last_name
     )
-
-    #Below saves each item in the query to a global list for exporting
+    #Add query into global list for exporting
     for item in query:
         dataList.append([item.first_name,item.last_name,item.career_matrix, item.licenses, item.state])
-
-
     return render_template("Employee.html", data=query)
 
 
@@ -129,8 +126,14 @@ def surnameSearch():
 @app.route("/exportdata")
 def createCSV():
 
+
+    listData = [
+        ["1", "Christian", "Bitzas", "Laramie"],
+        ["2", "Chris", "Something", "Tampa"],
+    ]
     stringInput = StringIO()
     csvWriter = csv.writer(stringInput)
+    #csvWriter.writerows(listData)
     csvWriter.writerows(dataList)
 
     download = make_response(
