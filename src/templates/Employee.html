@@ -3,6 +3,11 @@
    <h2 class="employee-header-styles">Employees</h2>
    <a href="/exportdata"><input type="submit" class="btnExport" value="Export Results" /></a>
    <a href="/"><input type="submit" class="btnBack" value="Back" /></a>
+
+    <form action="/Employee/Search" method="post">
+      <button type="submit" class="btn-link">Update</button>
+    </form>
+
    <table class="table table-striped table-dark">
 
          <thead class="general-table-styles">
@@ -20,6 +25,7 @@
 <!-- Basic dropdown -->
   <button class="btn btn-dark dropdown-toggle mr-4" type="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">Basic dropdown</button>
+
 
   <div class="dropdown-menu">
     <a class="dropdown-item">
@@ -39,6 +45,7 @@
       <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" id="checkbox3">
         <label class="custom-control-label" for="checkbox3">CPP</label>
+
       </div>
     </a>
         <div class="dropdown-divider"></div>
@@ -48,6 +55,7 @@
         <label class="custom-control-label" for="checkbox4">EIT</label>
       </div>
     </a>
+
   </div>
   <!-- Basic dropdown -->
          {% for row in data %}
@@ -66,4 +74,5 @@
          {% endfor %}
    </table>
 </div>
+
 {%endblock%}
