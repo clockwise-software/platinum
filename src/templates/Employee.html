@@ -1,11 +1,13 @@
 {%extends 'generalPageStyled.html'%} {%block mainBlock%}
-<div class="container results-page-styles">
+<div class="container results-page-styles" style="margin-top:20px;">
 
     <h2 class="employee-header-styles">Employees</h2>
-    <a href="/exportdata"><input type="submit" class="btnExport" value="Export Results" /></a>
-    <a href="/"><input type="submit" class="btnBack" value="Back" /></a>
-    <table border="1">
-    <thead class="general-table-styles">
+    <div style="text-align: right;">
+        <a href="/exportdata"><input type="submit" class="btnExport" value="Export Results" /></a>
+        <a href="/"><input type="submit" class="btnBack" value="Back" /></a>
+    </div>
+    <table border="1" style="margin-top: 20px;">
+    <thead class="general-table-styles" style="background-color: black; color: white; text-align: center;">
         <td>First Name</td>
         <td>Last Name</td>
         <td>FT/PT/.75</td>
