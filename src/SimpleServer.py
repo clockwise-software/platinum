@@ -20,7 +20,7 @@ app.secret_key = secrets.token_urlsafe(32)
 # Load the database
 db = SQLAlchemy(app)
 
-
+dataList = []
 class Employee(db.Model):
     """Database Model"""
 
@@ -41,23 +41,6 @@ class Employee(db.Model):
     skill_level = db.Column("Skill Level", db.Text)
 
 
-# This block below downloads the data returned by the database into a CSV file. Nothing is saved to the server.
-@app.route("/exportdata")
-def createCSV():
-    listData = [
-        ["1", "Christian", "Bitzas", "Laramie"],
-        ["2", "Chris", "Something", "Tampa"],
-    ]
-    stringInput = StringIO()
-    csvWriter = csv.writer(stringInput)
-    csvWriter.writerows(listData)
-
-    download = make_response(
-        stringInput.getvalue()
-    )  # Create response object to download CSV
-    download.headers["Content-Disposition"] = "attachment; filename=ExportedData.csv"
-    download.headers["Content-type"] = "text/csv"
-    return download
 
 
 @app.route("/")
@@ -133,7 +116,31 @@ def surnameSearch():
         Employee.last_name
     )
 
+    #Below saves each item in the query to a global list for exporting
+    for item in query:
+        dataList.append([item.first_name,item.last_name,item.career_matrix, item.licenses, item.state])
+
+
     return render_template("Employee.html", data=query)
+
+
+
+# This block below downloads the data returned by the database into a CSV file. Nothing is saved to the server.
+@app.route("/exportdata")
+def createCSV():
+
+    stringInput = StringIO()
+    csvWriter = csv.writer(stringInput)
+    csvWriter.writerows(dataList)
+
+    download = make_response(
+        stringInput.getvalue()
+    )  # Create response object to download CSV
+    download.headers["Content-Disposition"] = "attachment; filename=ExportedData.csv"
+    download.headers["Content-type"] = "text/csv"
+    return download
+
+
 
 
 if __name__ == "__main__":
