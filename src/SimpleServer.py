@@ -1,12 +1,15 @@
-## CLOCKWISE-BOOTCAMP SimpleServer.py 
-## Based on Server from Dr. Ian Cooper @ Cardiff
-## Updated by Dr. Mike Borowczak @ UWyo March 2021
+# CLOCKWISE-BOOTCAMP SimpleServer.py
+# Based on Server from Dr. Ian Cooper @ Cardiff
+# Updated by Dr. Mike Borowczak @ UWyo March 2021
 
-import os
-from flask import Flask, redirect, request, render_template
-import sqlite3
+import csv
+import secrets
+from io import StringIO
 
-DATABASE = 'bootcamp.db'
+from flask import Flask, make_response, render_template, request
+from sqlalchemy import and_
+
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///bootcamp.db"
@@ -39,36 +42,51 @@ class Employee(db.Model):
 
 
 
+
 @app.route("/")
-def basic():
-    return render_template('Employee.html')
+def root():
+    """Dump all the employees to a table."""
+    # TODO: Make this dynamically load
+    # TODO: Make this prettier
+    data = Employee.query.all()
+    return render_template("EmployeeSearch.html", data=data) #Make Employee Search Page the Default Page
 
-@app.route("/Employee/AddEmployee", methods = ['POST','GET'])
+
+@app.route("/Employee/AddEmployee", methods=["GET", "POST"])
 def studentAddDetails():
-	if request.method =='GET':
-		return render_template('EmployeeData.html')
-	if request.method =='POST':
-		firstName = request.form.get('firstName', default="Error") 
-		lastName = request.form.get('lastName', default="Error")
-		businessunit = request.form.get('bu', default="Error")
-		state = request.form.get('state', default="Error")
-		print("inserting employee"+firstName)
-		try:
-			conn = sqlite3.connect(DATABASE)
-			cur = conn.cursor()
-			cur.execute("INSERT INTO EmployeeList ('FirstName', 'LastName', 'Business Unit', 'State/Province')\
-						VALUES (?,?,?,?)",(firstName, lastName, businessunit, state ) )
+    if request.method == "GET":
+        return render_template("EmployeeData.html")
 
-			conn.commit()
-			msg = "Record successfully added"
-		except:
-			conn.rollback()
-			msg = "error in insert operation"
-		finally:
-			conn.close()
-			return msg
+    # If a field is left empty do nothing
+    # TODO: Implement a pretty way of telling the user
+    if "" in request.form.values():
+        return ("", 204)
 
-@app.route("/Employee/Search", methods = ['GET','POST'])
+    first_name = request.form.get("first_name")
+    last_name = request.form.get("last_name")
+
+    # Check if the employee already exists
+    employee = Employee.query.filter_by(
+        first_name=first_name, last_name=last_name
+    ).first()
+
+    # Update if the employee exists
+    # TODO: Show some pretty confirmation
+    if employee is not None:
+        employee.first_name = request.form.get("first_name")
+        employee.last_name = request.form.get("last_name")
+        employee.business_unit = request.form.get("business_unit")
+        employee.state = request.form.get("state")
+    else:
+        employee = Employee(**request.form)
+        print(employee.first_name)
+        db.session.add(employee)
+
+    db.session.commit()
+    return render_template("EmployeeData.html")
+
+
+@app.route("/Employee/Search", methods=["GET", "POST"])
 def surnameSearch():
     if request.method == "GET":
         return render_template("EmployeeSearch.html")
