@@ -117,6 +117,8 @@ def surnameSearch():
     )
     
     #Add query to global list for exporting
+    global dataList
+    dataList = [['FIRST NAME', 'LAST NAME', 'CAREER', 'LICENSES', 'STATE']]
     for item in query:
         dataList.append([item.first_name,item.last_name,item.career_matrix, item.licenses, item.state])
 
